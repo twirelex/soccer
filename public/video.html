@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Single Video</title>
+    <style>
+      nav {
+        background-color: #333;
+        color: #fff;
+        padding: 10px;
+      }
+
+      nav ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: flex;
+        justify-content: center;
+      }
+
+      nav ul li a {
+        color: #fff;
+        text-decoration: none;
+        padding: 10px;
+      }
+      #video-container {
+        text-align: center; /* center the text within the container */
+        padding: 20px; /* add some padding to the container */
+      }
+
+      #video-container video {
+        width: 50%; /* set the width of the video element to 80% of the container's width */
+        max-height: 600px; /* set the maximum height of the video element to 600px */
+      }
+
+      #video-container h3 {
+        font-size: 24px; /* increase the font size of the title */
+        margin-top: 20px; /* add some margin to the top of the title */
+      }
+
+      #video-container p {
+        font-size: 18px; /* increase the font size of the information */
+        margin-top: 10px; /* add some margin to the top of the information */
+      }
+    </style>
+  </head>
+  <body>
+    <nav>
+      <ul>
+        <li><a href="/">Home</a></li>
+      </ul>
+    </nav>
+    <div id="video-container"></div>
+    <script>
+      let videoTitle = window.location.href.split("/")[4];
+      //   let goalTime = window.location.href.split('_')[1];
+      //   let game = window.location.href.split('_')[2];
+      //let timePosted = localStorage.getItem("timePosted")
+      fetch(`/singlevideo/${videoTitle}`)
+        .then((response) => response.json())
+        .then((video) => {
+          var videoContainer = document.getElementById("video-container");
+          var newVideo = document.createElement("video");
+          newVideo.src = `/videos/${videoTitle}.mp4`;
+          newVideo.controls = true;
+          var newVideoTitle = document.createElement("h3");
+          newVideoTitle.innerHTML = video.title.replace(/-/g, " ");
+          var newVideoGoalTime = document.createElement("p");
+          newVideoGoalTime.innerHTML = `Goal Time: ${video.goalTime}`;
+          var newVideoGame = document.createElement("p");
+          newVideoGame.innerHTML = `Game: ${video.game}`;
+          var newVideoGameTimePosted = document.createElement("p");
+          newVideoGameTimePosted.innerHTML = `Posted: ${video.timePosted}`;
+          videoContainer.appendChild(newVideo);
+          videoContainer.appendChild(newVideoTitle);
+          videoContainer.appendChild(newVideoGoalTime);
+          videoContainer.appendChild(newVideoGame);
+          videoContainer.appendChild(newVideoGameTimePosted);
+        })
+        .catch((error) => {
+          var videoContainer = document.getElementById("video-container");
+          var errorMessage = document.createElement("p");
+          errorMessage.innerHTML = "Error: Not found.";
+          errorMessage.className = "error-message";
+          videoContainer.appendChild(errorMessage);
+        });
+    </script>
+  </body>
+</html>
