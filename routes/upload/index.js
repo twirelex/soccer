@@ -10,7 +10,7 @@ module.exports = async function (fastify, opts) {
     const data = await request.file()
    
      const buffered = await data.toBuffer()
-     //if(data.fields.password.value !== process.env.authenticate) return reply.sendFile('notfound.html')
+     if(data.fields.password.value !== process.env.authenticate) return reply.sendFile('notfound.html')
     const filename = path.join(__dirname, '../../public/videos/') + data.fields.name.value.split(' ').join('-') +
      '_' + 
      data.fields.gameTime.value.split(' ').join('-') 
